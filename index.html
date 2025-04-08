@@ -13,9 +13,9 @@
 </head>
 <body>
     <h2>Hostel Outpass Filler</h2>
-    <label>Outing Date (M/d/yyyy): <input id="outingDate" type="text"></label>
+    <label>Outing Date: <input id="outingDate" type="date"></label>
     <label>Outing Time (e.g., 18.00): <input id="outingTime" value="18.00"></label>
-    <label>Return Date (M/d/yyyy): <input id="returnDate" type="text"></label>
+    <label>Return Date: <input id="returnDate" type="date"></label>
     <label>Return In-Time (e.g., 20.00): <input id="returnTime" value="20.00"></label>
     <label>Purpose: 
         <select id="purpose">
@@ -39,21 +39,25 @@
     <p id="result"></p>
 
     <script>
+        // Set today's date as default in YYYY-MM-DD format for date picker
         const today = new Date();
-        const defaultDate = \`\${today.getMonth() + 1}/\${today.getDate()}/\${today.getFullYear()}\`;
+        const defaultDate = today.toISOString().split('T')[0]; // e.g., "2025-04-08"
         document.getElementById("outingDate").value = defaultDate;
         document.getElementById("returnDate").value = defaultDate;
 
         function generateScript() {
-            const outingDate = document.getElementById("outingDate").value;
+            // Get dates from picker (YYYY-MM-DD) and convert to M/d/yyyy
+            const outingDateISO = document.getElementById("outingDate").value;
+            const returnDateISO = document.getElementById("returnDate").value;
+            const outingDate = new Date(outingDateISO).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+            const returnDate = new Date(returnDateISO).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
             const outingTime = document.getElementById("outingTime").value;
-            const returnDate = document.getElementById("returnDate").value;
             const returnTime = document.getElementById("returnTime").value;
             const purpose = document.getElementById("purpose").value;
 
-            const script = \`javascript:(function(){document.getElementById("QuestionId_r36e3756273664c9cb60d19ff61820915").value="Kingsly Rufus K J";document.getElementById("QuestionId_rc44a6690878943aaab796b1884fd769b").value="23BCS073";document.getElementById("QuestionId_r58430735a3544b2997994c3fd223f6b8").value="9942555337";document.getElementById("QuestionId_r29db15822bde4c848cfcd465dad7b0b5").value="MH - 02";document.getElementById("QuestionId_r9fcc4972f62f47468a0fb25c0c13ae74").value="207";document.getElementById("QuestionId_re944ec370e9b4cada53745fb23ddc612").value="yes";document.getElementById("QuestionId_r386f6785e13d43c9b639a5d7a3da7399").value="\${outingDate}";document.getElementById("QuestionId_r0f134f400d3e4e319163fd37284ccd74").value="\${outingTime}";document.getElementById("QuestionId_rd4356d23fabb49c0a1ad1e0db04fe922").value="\${returnDate}";document.getElementById("QuestionId_rad22bb46fa6149c9b2d0c9e189724927").value="\${returnTime}";document.getElementById("QuestionId_rc485d02d818d43a9ae2d851a4f3e4afe").value="\${purpose}";})();\`;
+            const script = `javascript:(function(){document.getElementById("QuestionId_r36e3756273664c9cb60d19ff61820915").value="Kingsly Rufus K J";document.getElementById("QuestionId_rc44a6690878943aaab796b1884fd769b").value="23BCS073";document.getElementById("QuestionId_r58430735a3544b2997994c3fd223f6b8").value="9942555337";document.getElementById("QuestionId_r29db15822bde4c848cfcd465dad7b0b5").value="MH - 02";document.getElementById("QuestionId_r9fcc4972f62f47468a0fb25c0c13ae74").value="207";document.getElementById("QuestionId_re944ec370e9b4cada53745fb23ddc612").value="yes";document.getElementById("QuestionId_r386f6785e13d43c9b639a5d7a3da7399").value="${outingDate}";document.getElementById("QuestionId_r0f134f400d3e4e319163fd37284ccd74").value="${outingTime}";document.getElementById("QuestionId_rd4356d23fabb49c0a1ad1e0db04fe922").value="${returnDate}";document.getElementById("QuestionId_rad22bb46fa6149c9b2d0c9e189724927").value="${returnTime}";document.getElementById("QuestionId_rc485d02d818d43a9ae2d851a4f3e4afe").value="${purpose}";})();`;
 
-            document.getElementById("result").innerHTML = \`<a href="\${script}">Tap to Fill Form</a>\`;
+            document.getElementById("result").innerHTML = `<a href="${script}">Tap to Fill Form</a>`;
         }
     </script>
 </body>
